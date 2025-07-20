@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Applied Companies</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+</head>
+
+<body class="bg-gray-50">
+    <!-- Navigation Bar -->
+    <nav class="bg-blue-600 text-white p-4">
+        <div class="container mx-auto flex justify-between items-center">
+            <h1 class="text-2xl font-bold">CDC Portal</h1>
+            <div class="space-x-4">
+                <a href="/student" class="px-4 py-2 hover:bg-blue-700 rounded">Companies</a>
+                <a href="/applied_companies" class="px-4 py-2 hover:bg-blue-700 rounded">Applied Companies</a>
+                <a href="/practice" class="px-4 py-2 hover:bg-blue-700 rounded">Mocks</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Content Section -->
+    <section class="container mx-auto p-6">
+        <div class="bg-white rounded-lg shadow-lg p-6">
+            <h2 class="text-2xl font-semibold mb-4">Applied Companies</h2>
+            <table class="min-w-full divide-y divide-gray-200">
+                <thead>
+                    <tr class="bg-gray-50">
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                            Company Name</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                            Status</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                            Edit Details</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                            Withdraw</th>
+                    </tr>
+                </thead>
+                <tbody class="bg-white divide-y divide-gray-200">
+                    <% if (appliedCompanies && appliedCompanies.length> 0) { %>
+                        <% appliedCompanies.forEach(company=> { %>
+                            <tr>
+                                <td class="px-6 py-4 whitespace-nowrap">
+                                    <%= company.name %>
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap">
+                                    <% if (company.status==='Under Review' ) { %>
+                                        <span class="px-2 py-1 text-sm rounded-full bg-purple-100 text-white-700">
+                                            <%= company.status %>
+                                        </span>
+                                        <% } else if (company.status==='Shortlisted' ) { %>
+                                            <span class="px-2 py-1 text-sm rounded-full bg-green-100 text-green-700">
+                                                <%= company.status %>
+                                            </span>
+                                            <% } else { %>
+                                                <span class="px-2 py-1 text-sm rounded-full bg-blue-100 text-blue-700">
+                                                    <%= company.status %>
+                                                </span>
+                                                <% } %>
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap space-x-2">
+                                    <button onclick="editApplication(this)"
+                                        class="bg-blue-500 text-white px-4 py-2 rounded-full hover:bg-blue-900"
+                                        data-id="<%= company.id %>" data-company="<%= company.name %>"
+                                        data-name="<%= company.name_field %>" data-jntu="<%= company.jntu_number %>"
+                                        data-cgpa="<%= company.cgpa %>" data-projects="<%= company.projects %>"
+                                        data-resume="<%= company.resume_link %>">
+                                        Edit
+                                    </button>
+
+                                </td>
+                                <td>
+                                    <button onclick="withdrawApplication('<%= company.id %>')"
+                                        class="bg-red-500 text-white px-6 py-2 rounded-full hover:bg-red-600">
+                                        Withdraw
+                                    </button>
+
+                                </td>
+                            </tr>
+                            <% }); %>
+                                <% } else { %>
+                                    <tr>
+                                        <td colspan="3" class="text-center px-6 py-4 text-gray-500">No applied companies
+                                            found.</td>
+                                    </tr>
+                                    <% } %>
+                </tbody>
+            </table>
+        </div>
+    </section>
+
+    <!-- Edit Application Modal -->
+    <div id="editApplicationModal"
+        class="fixed inset-0 bg-black bg-opacity-50 hidden z-50 flex items-center justify-center">
+        <div class="bg-white rounded-lg p-6 w-full max-w-lg relative">
+            <button type="button" onclick="closeEditModal()"
+                class="absolute top-3 right-3 text-gray-600 hover:text-gray-900 text-2xl">&times;</button>
+            <h2 class="text-2xl font-semibold mb-4 text-center">Edit Application</h2>
+            <form id="editApplicationForm" class="space-y-4" method="POST" action="/update-application">
+                <input type="hidden" name="id" id="editApplicationId">
+                <div>
+                    <label class="block text-gray-700 mb-2">Company Name</label>
+                    <input type="text" id="editCompanyName" name="company_name" class="w-full border rounded p-2"
+                        readonly>
+                </div>
+                <div>
+                    <label class="block text-gray-700 mb-2">Full Name</label>
+                    <input type="text" name="name" id="editName" required pattern="[A-Za-z ]+"
+                        class="w-full border rounded p-2">
+                </div>
+                <div>
+                    <label class="block text-gray-700 mb-2">JNTU Registration Number</label>
+                    <input type="text" name="jntu_number" id="editJntu" required pattern="[A-Za-z0-9]+"
+                        class="w-full border rounded p-2">
+                </div>
+                <div>
+                    <label class="block text-gray-700 mb-2">CGPA</label>
+                    <input type="number" name="cgpa" id="editCgpa" min="0" max="10" step="0.01" required
+                        class="w-full border rounded p-2">
+                </div>
+                <div>
+                    <label class="block text-gray-700 mb-2">Number of Projects</label>
+                    <input type="number" name="projects" id="editProjects" min="0" max="10" required
+                        class="w-full border rounded p-2">
+                </div>
+                <div>
+                    <label class="block text-gray-700 mb-2">Resume (Google Drive Link)</label>
+                    <input type="url" name="resume_link" id="editResume" required class="w-full border rounded p-2">
+                </div>
+                <div class="flex justify-end space-x-2">
+                    <button type="button" onclick="closeEditModal()"
+                        class="px-4 py-2 bg-gray-500 text-white rounded hover:bg-gray-600">Cancel</button>
+                    <button type="submit"
+                        class="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700">Update</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        function editApplication(button) {
+            // Read from button's data attributes
+            const id = button.dataset.id;
+            const company = button.dataset.company;
+            const name = button.dataset.name;
+            const jntu = button.dataset.jntu;
+            const cgpa = button.dataset.cgpa;
+            const projects = button.dataset.projects;
+            const resume = button.dataset.resume;
+
+            // Fill the form fields
+            document.getElementById('editApplicationId').value = id;
+            document.getElementById('editCompanyName').value = company;
+            document.getElementById('editName').value = name;
+            document.getElementById('editJntu').value = jntu;
+            document.getElementById('editCgpa').value = cgpa;
+            document.getElementById('editProjects').value = projects;
+            document.getElementById('editResume').value = resume;
+
+            // Show the modal
+            document.getElementById('editApplicationModal').classList.remove('hidden');
+        }
+
+        function closeEditModal() {
+            document.getElementById('editApplicationModal').classList.add('hidden');
+        }
+        async function withdrawApplication(id) {
+            const confirmed = confirm('Are you sure you want to withdraw your application?');
+            if (!confirmed) return;
+
+            try {
+                const response = await fetch('/withdraw-application', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ id })
+                });
+
+                if (response.ok) {
+                    // Reload the page to reflect deletion
+                    location.reload();
+                } else {
+                    alert('Failed to withdraw application.');
+                }
+            } catch (err) {
+                console.error('Error withdrawing application:', err);
+                alert('Something went wrong.');
+            }
+        }
+    </script>
+
+
+
+</body>
+
+</html>

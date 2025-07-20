@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Job Listings</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gradient-to-br from-gray-50 to-gray-100 min-h-screen py-8 px-4">
+    <div class="max-w-7xl mx-auto">
+        <h1 class="text-4xl font-bold text-center text-gray-800 mb-8">Available Jobs</h1>
+        
+        <div class="bg-white rounded-lg shadow-lg overflow-hidden">
+            <div class="overflow-x-auto">
+                <table class="w-full">
+                    <thead>
+                        <tr class="bg-gray-50 border-b border-gray-200">
+                            <th class="px-6 py-4 text-left text-sm font-semibold text-gray-600">Company</th>
+                            <th class="px-6 py-4 text-left text-sm font-semibold text-gray-600">Branch</th>
+                            <th class="px-6 py-4 text-left text-sm font-semibold text-gray-600">Domain</th>
+                            <th class="px-6 py-4 text-left text-sm font-semibold text-gray-600">Deadline</th>
+                            <th class="px-6 py-4 text-right text-sm font-semibold text-gray-600">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <% if (jobs.length > 0) { %>
+                            <% jobs.forEach(job => { %>
+                                <tr class="border-b border-gray-200 hover:bg-gray-50 transition-colors duration-200">
+                                    <td class="px-6 py-4">
+                                        <div class="flex items-center space-x-3">
+                                            
+                                            <span class="font-medium text-gray-800"><%= job.company_name %></span>
+                                        </div>
+                                    </td>
+                                    <td class="px-6 py-4"><%= job.branch %></td>
+                                    <td class="px-6 py-4"><%= job.domain %></td>
+                                    <td class="px-6 py-4"><%= job.deadline_date.toISOString().split('T')[0] %></td>
+                                    <td class="flex justify-center px-3 py-4 mt-4 rounded-full text-sm font-medium bg-blue-100 text-blue-800"> In Progress</td>
+                                    <td class="px-6 py-4 text-right">
+                                        <div class="flex justify-end space-x-2">
+                                            <button class="px-4 py-2 bg-emerald-500 text-white rounded-md hover:bg-emerald-600 transform hover:scale-105 transition-all duration-200">Apply</button>
+                                            <button class="px-4 py-2 bg-gray-500 text-white rounded-md hover:bg-gray-600 transform hover:scale-105 transition-all duration-200">Withdraw</button>
+                                        </div>
+                                    </td>
+                                </tr>
+                            <% }) %>
+                        <% } else { %>
+                            <tr>
+                                <td colspan="5" class="text-center text-gray-600 py-4">No jobs available at the moment.</td>
+                            </tr>
+                        <% } %>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

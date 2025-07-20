@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CDC Department Portal</title>
+    <script src="https://unpkg.com/alpinejs" defer></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+
+<body class="bg-gray-50">
+    <div x-data="{
+        activeTab: 'add',
+        companies: [],
+        companyName: '',
+        cgpa: '',
+        branch: '',
+        domain: '',
+        deadline: '',
+        rounds: '',
+        search: '',
+        currentPage: 1,
+        itemsPerPage: 5,
+        sortField: 'companyName',
+        sortDirection: 'asc',
+        showModal: false,
+        editingCompany: null,
+
+
+
+        addCompany() {
+            this.companies.push({
+                id: Date.now(),
+                companyName: this.companyName,
+                cgpa: this.cgpa,
+                branch: this.branch,
+                domain: this.domain,
+                deadline: this.deadline,
+                rounds: this.rounds
+            });
+            this.resetForm();
+        },
+
+        
+        deleteCompany(id) {
+            if(confirm('Are you sure you want to delete this company?')) {
+                this.companies = this.companies.filter(company => company.id !== id);
+            }
+        },
+        
+        editCompany(company) {
+            this.editingCompany = company;
+            this.companyName = company.companyName;
+            this.cgpa = company.cgpa;
+            this.branch = company.branch;
+            this.domain = company.domain;
+            this.deadline = company.deadline;
+            this.rounds = company.rounds;
+            this.showModal = true;
+        },
+        
+        updateCompany() {
+            const index = this.companies.findIndex(c => c.id === this.editingCompany.id);
+            this.companies[index] = {
+                ...this.editingCompany,
+                companyName: this.companyName,
+                cgpa: this.cgpa,
+                branch: this.branch,
+                domain: this.domain,
+                deadline: this.deadline,
+                rounds: this.rounds
+            };
+            this.showModal = false;
+            this.resetForm();
+        },
+        
+        resetForm() {
+            this.companyName = '';
+            this.cgpa = '';
+            this.branch = '';
+            this.domain = '';
+            this.deadline = '';
+            this.rounds = '';
+            this.editingCompany = null;
+        }
+    }">
+        <nav class="bg-white shadow-lg">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="flex justify-between h-16">
+                    <div class="flex">
+                        <div class="flex-shrink-0 flex items-center">
+                            <h1 class="text-xl font-bold text-gray-800">CDC Portal</h1>
+                        </div>
+                        <div class="hidden sm:ml-6 sm:flex sm:space-x-8">
+                            <button @click="activeTab = 'add'" :class="{'border-blue-500': activeTab === 'add'}"
+                                class="border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium">
+                                Add Company
+                            </button>
+                            <button @click="activeTab = 'view'" :class="{'border-blue-500': activeTab === 'view'}"
+                                class="border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium">
+                                View Companies
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </nav>
+
+        <main class="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
+            <div x-show="activeTab === 'add'" class="bg-white shadow rounded-lg p-6">
+                <form @submit.prevent="addCompany()" class="space-y-6">
+                    <div class="grid grid-cols-1 gap-y-6 gap-x-4 sm:grid-cols-2">
+                        <div>
+                            <label for="companyName" class="block text-sm font-medium text-gray-700">Company
+                                Name</label>
+                            <input type="text" x-model="companyName" required minlength="2" id="companyName"
+                                class="mt-1 focus:ring-blue-500 focus:border-blue-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md">
+                        </div>
+
+                        <div>
+                            <label for="cgpa" class="block text-sm font-medium text-gray-700">CGPA</label>
+                            <input type="number" x-model="cgpa" required min="0" max="10" step="0.01" id="cgpa"
+                                class="mt-1 focus:ring-blue-500 focus:border-blue-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md">
+                        </div>
+
+                        <div>
+                            <label for="branch" class="block text-sm font-medium text-gray-700">Branch</label>
+                            <select x-model="branch" required id="branch"
+                                class="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
+                                <option value="">Select Branch</option>
+                                <option value="Computer Science">Computer Science</option>
+                                <option value="Information Technology">Information Technology</option>
+                                <option value="Electronics">Electronics</option>
+                                <option value="Mechanical">Mechanical</option>
+                                <option value="Civil">Civil</option>
+                                <option value="Electrical">Electrical</option>
+                            </select>
+                        </div>
+
+                        <div>
+                            <label for="domain" class="block text-sm font-medium text-gray-700">Domain</label>
+                            <select x-model="domain" required id="domain"
+                                class="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
+                                <option value="">Select Domain</option>
+                                <option value="Full Stack Development">Full Stack Development</option>
+                                <option value="Artificial Intelligence">Artificial Intelligence</option>
+                                <option value="Machine Learning">Machine Learning</option>
+                                <option value="Cyber Security">Cyber Security</option>
+                                <option value="Data Science">Data Science</option>
+                                <option value="Cloud Computing">Cloud Computing</option>
+                            </select>
+                        </div>
+
+                        <div>
+                            <label for="deadline" class="block text-sm font-medium text-gray-700">Deadline Date</label>
+                            <input type="date" x-model="deadline" required :min="new Date().toISOString().split('T')[0]"
+                                id="deadline"
+                                class="mt-1 focus:ring-blue-500 focus:border-blue-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md">
+                        </div>
+
+                        <div>
+                            <label for="rounds" class="block text-sm font-medium text-gray-700">Recruitment
+                                Rounds</label>
+                            <input type="number" x-model="rounds" required min="1" max="5" id="rounds"
+                                class="mt-1 focus:ring-blue-500 focus:border-blue-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md">
+                        </div>
+                    </div>
+
+                    <div class="flex justify-end">
+                        <button type="submit"
+                            class="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+                            Add Company
+                        </button>
+                    </div>
+                </form>
+            </div>
+
+            <div x-show="activeTab === 'view'" class="bg-white shadow rounded-lg p-6">
+                <div class="mb-4">
+                    <input type="text" x-model="search" placeholder="Search companies..."
+                        class="w-full px-4 py-2 border rounded-lg focus:ring-blue-500 focus:border-blue-500">
+                </div>
+
+                <div class="overflow-x-auto">
+                    <table class="min-w-full divide-y divide-gray-200">
+                        <thead class="bg-gray-50">
+                            <tr>
+                                <th scope="col"
+                                    class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                    Company Name</th>
+                                <th scope="col"
+                                    class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                    CGPA</th>
+                                <th scope="col"
+                                    class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                    Branch</th>
+                                <th scope="col"
+                                    class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                    Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody class="bg-white divide-y divide-gray-200">
+                            <template x-for="company in companies" :key="company.id">
+                                <tr>
+                                    <td class="px-6 py-4 whitespace-nowrap" x-text="company.companyName"></td>
+                                    <td class="px-6 py-4 whitespace-nowrap" x-text="company.cgpa"></td>
+                                    <td class="px-6 py-4 whitespace-nowrap" x-text="company.branch"></td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                                        <button @click="editCompany(company)"
+                                            class="text-green-500 hover:text-blue-900 mr-4">Eligible students</button>
+                                        <button @click="editCompany(company)"
+                                            class="text-blue-600 hover:text-blue-900 mr-4">Edit</button>
+                                        <button @click="deleteCompany(company.id)"
+                                            class="text-red-600 hover:text-red-900">Delete</button>
+                                    </td>
+                                </tr>
+                            </template>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </main>
+
+        <!-- Edit Modal -->
+        <div x-show="showModal" class="fixed z-10 inset-0 overflow-y-auto" aria-labelledby="modal-title" role="dialog"
+            aria-modal="true">
+            <div class="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
+                <div class="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity" aria-hidden="true"></div>
+                <div
+                    class="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full">
+                    <div class="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
+                        <form @submit.prevent="updateCompany()" class="space-y-6">
+                            <!-- Same form fields as Add Company but for editing -->
+                            <div class="grid grid-cols-1 gap-y-6 gap-x-4">
+                                <div>
+                                    <label for="edit-companyName"
+                                        class="block text-sm font-medium text-gray-700">Company Name</label>
+                                    <input type="text" x-model="companyName" required minlength="2"
+                                        id="edit-companyName"
+                                        class="mt-1 focus:ring-blue-500 focus:border-blue-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md">
+                                </div>
+                                <!-- Add other form fields similarly -->
+                            </div>
+                            <div class="flex justify-end">
+                                <button type="button" @click="showModal = false"
+                                    class="mr-3 inline-flex justify-center py-2 px-4 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">Cancel</button>
+                                <button type="submit"
+                                    class="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">Update
+                                    Company</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>

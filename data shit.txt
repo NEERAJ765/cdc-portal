@@ -1,0 +1,67 @@
+database :
+Starting pgAdmin 4...
+
+CREATE TABLE company (
+    id SERIAL PRIMARY KEY,
+    company_name VARCHAR(255) NOT NULL,
+    company_email VARCHAR(255) UNIQUE NOT NULL,
+    password VARCHAR(255) NOT NULL,
+    required_cgpa_threshold NUMERIC(3, 2) NOT NULL,
+    company_description TEXT
+);
+
+
+CREATE TABLE cdc (
+  admin_id SERIAL PRIMARY KEY,
+  admin_name VARCHAR(255) NOT NULL,
+  password VARCHAR(255) NOT NULL
+);
+
+
+
+CREATE TABLE students (
+    id SERIAL PRIMARY KEY,             
+    jntu_number VARCHAR(20) UNIQUE NOT NULL,   
+    email VARCHAR(255) UNIQUE NOT NULL,      
+    password VARCHAR(255) NOT NULL,           
+    cgpa DECIMAL(4, 2) NOT NULL,             
+    branch VARCHAR(100) NOT NULL            
+);
+
+
+
+CREATE TABLE recruitment_forms (
+  id SERIAL PRIMARY KEY,
+  company_name VARCHAR(255) NOT NULL,
+  cgpa DECIMAL(3, 2) NOT NULL,
+  branch VARCHAR(255) NOT NULL,
+  domain VARCHAR(255) NOT NULL,
+  deadline_date DATE NOT NULL,
+  recruitment_rounds TEXT NOT NULL
+);
+
+
+
+CREATE TABLE mocks (
+    id SERIAL PRIMARY KEY,
+    company_logo TEXT NOT NULL,
+    company_name VARCHAR(255) NOT NULL,
+    mock_link TEXT NOT NULL,
+    mock_date DATE NOT NULL,
+    duration INTEGER NOT NULL,
+    duration_unit VARCHAR(10) CHECK (duration_unit IN ('weeks', 'months')) NOT NULL
+);
+
+
+
+
+CREATE TABLE job_applications (
+    id SERIAL PRIMARY KEY,
+    company_name VARCHAR(255) NOT NULL,
+    applicant_name VARCHAR(255) NOT NULL,
+    jntu_number VARCHAR(20) NOT NULL,
+    cgpa DECIMAL(4, 2) NOT NULL,
+    projects_count INT NOT NULL,
+    resume_link TEXT NOT NULL,
+    application_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);

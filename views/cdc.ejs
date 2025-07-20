@@ -1,0 +1,533 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CDC Department Portal</title>
+    <script src="https://unpkg.com/alpinejs" defer></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+
+<body class="bg-gray-50">
+    <div x-data="{ activeTab: 'add' }">
+        <!-- Navbar -->
+
+
+        <!-- <nav class="bg-blue-600 text-white p-4">
+        <div class="container mx-auto flex justify-between items-center">
+            <h1 class="text-2xl font-bold">CDC Portal</h1>
+            <div class="space-x-4">
+                <a href="/student" class="px-4 py-2 hover:bg-blue-700 rounded">Companies</a>
+                <a href="/applied_companies" class="px-4 py-2 hover:bg-blue-700 rounded">Applied Companies</a>
+                <a href="/practice" class="px-4 py-2 hover:bg-blue-700 rounded">Mocks</a>
+            </div>
+        </div>
+    </nav> -->
+
+
+
+
+        <nav class="bg-blue-600 text-white p-4">
+            <div class="container mx-auto flex justify-between items-center">
+                <div class="flex justify-between h-16">
+                    <div class="flex">
+                        <div class="flex-shrink-0 flex items-center">
+                            <h1 class="text-xl font-bold text-white-800">CDC Portal</h1>
+                        </div>
+                        <div class="hidden sm:ml-6 sm:flex sm:space-x-8">
+                            <button @click="activeTab = 'add'" :class="{'border-blue-500': activeTab === 'add'}"
+                                class="border-transparent text-white-500 hover:border-gray-300  inline-flex items-center px-1 pt-1 border-b-2 text-l font-medium">
+                                Add Company
+                            </button>
+                            <button @click="activeTab = 'view'" :class="{'border-blue-500': activeTab === 'view'}"
+                                class="border-transparent text-white-500 hover:border-gray-300  inline-flex items-center px-1 pt-1 border-b-2 text-l font-medium">
+                                View Companies
+                            </button>
+                            <a href="/addmock"
+                                class="border-transparent text-white-500 hover:border-gray-300  inline-flex items-center px-1 pt-1 border-b-2 text-l font-medium">
+                                Add Mock
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </nav>
+
+        <!-- Main Content -->
+        <main class="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
+            <!-- Add Company Form -->
+            <div x-show="activeTab === 'add'" class="bg-white shadow rounded-lg p-6">
+                <form class="space-y-6" method="POST" action="/add-company">
+                    <div class="grid grid-cols-1 gap-y-6 gap-x-4 sm:grid-cols-2">
+
+                        <div>
+                            <label for="companyName" class="block text-sm font-medium text-gray-700">Company
+                                Name</label>
+                            <input type="text" id="companyName" name="company_name" required minlength="2"
+                                class="mt-1 focus:ring-blue-500 focus:border-blue-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md">
+                        </div>
+
+                        <div>
+                            <label for="cgpa" class="block text-sm font-medium text-gray-700">CGPA</label>
+                            <input type="number" id="cgpa" name="cgpa" required min="0" max="10" step="0.01"
+                                class="mt-1 focus:ring-blue-500 focus:border-blue-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md">
+                        </div>
+
+                        <div>
+                            <label for="branch" class="block text-sm font-medium text-gray-700">Branch</label>
+                            <select id="branch" name="branch" required
+                                class="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
+                                <option value="">Select Branch</option>
+                                <option value="Computer Science">Computer Science</option>
+                                <option value="Information Technology">Information Technology</option>
+                                <option value="Electronics">Electronics</option>
+                                <option value="Mechanical">Mechanical</option>
+                                <option value="Civil">Civil</option>
+                                <option value="Electrical">Electrical</option>
+                            </select>
+                        </div>
+
+                        <div>
+                            <label for="domain" class="block text-sm font-medium text-gray-700">Domain</label>
+                            <select id="domain" name="domain" required
+                                class="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
+                                <option value="">Select Domain</option>
+                                <option value="Full Stack Development">Full Stack Development</option>
+                                <option value="Artificial Intelligence">Artificial Intelligence</option>
+                                <option value="Machine Learning">Machine Learning</option>
+                                <option value="Cyber Security">Cyber Security</option>
+                                <option value="Data Science">Data Science</option>
+                                <option value="Cloud Computing">Cloud Computing</option>
+                            </select>
+                        </div>
+
+                        <div>
+                            <label for="deadline" class="block text-sm font-medium text-gray-700">Deadline Date</label>
+                            <input type="date" id="deadline" name="deadline_date" required
+                                class="mt-1 focus:ring-blue-500 focus:border-blue-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md">
+                        </div>
+
+                        <div>
+                            <label for="rounds" class="block text-sm font-medium text-gray-700">Recruitment
+                                Rounds</label>
+                            <input type="number" id="rounds" name="recruitment_rounds" required min="1" max="5"
+                                class="mt-1 focus:ring-blue-500 focus:border-blue-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md">
+                        </div>
+
+                    </div>
+
+                    <div class="flex justify-end">
+                        <button type="submit"
+                            class="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+                            Add Company
+                        </button>
+                    </div>
+                </form>
+            </div>
+
+            <div x-show="activeTab === 'view'" x-data="companiesTable()" x-init="init()" class="max-w-7xl mx-auto p-6">
+                <div class="bg-white shadow rounded-lg p-6">
+                    <h2 class="text-lg font-medium text-gray-900">Companies List</h2>
+
+                    <div class="mt-6 bg-white shadow rounded-lg p-6">
+                        <div class="mb-4">
+                            <input type="text" placeholder="Search companies..."
+                                class="w-full px-4 py-2 border rounded-lg focus:ring-blue-500 focus:border-blue-500"
+                                x-model="searchTerm" />
+                        </div>
+
+                        <div class="overflow-x-auto">
+                            <table class="min-w-full divide-y divide-gray-200">
+                                <thead class="bg-gray-50">
+                                    <tr>
+                                        <th
+                                            class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                            Company Name</th>
+                                        <th
+                                            class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                            CGPA</th>
+                                        <th
+                                            class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                            Branch</th>
+                                        <th
+                                            class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                            Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="bg-white divide-y divide-gray-200">
+                                    <template x-for="company in filteredCompanies" :key="company.id">
+                                        <tr>
+                                            <td class="px-6 py-4 whitespace-nowrap" x-text="company.company_name"></td>
+                                            <td class="px-6 py-4 whitespace-nowrap" x-text="company.cgpa"></td>
+                                            <td class="px-6 py-4 whitespace-nowrap" x-text="company.branch"></td>
+                                            <td
+                                                class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium space-x-4">
+                                                <!-- <button class="text-green-500 hover:text-blue-900"
+                                                    @click="viewEligibleStudents(company.id)">
+                                                    Eligible Students
+                                                </button> -->
+                                                <button class="text-green-500 hover:text-blue-900"
+                                                    @click="fetchEligibleStudents(company.id)">
+                                                    Eligible Students
+                                                </button>
+
+
+
+
+                                                <button class="text-blue-600 hover:text-blue-900"
+                                                    @click="openModal(company)">Edit</button>
+                                                <button class="text-red-600 hover:text-red-900"
+                                                    @click="deleteCompany(company.id)">Delete</button>
+                                            </td>
+                                        </tr>
+                                    </template>
+                                    <template x-if="filteredCompanies.length === 0">
+                                        <tr>
+                                            <td colspan="4" class="text-center p-4 text-gray-500">No companies found.
+                                            </td>
+                                        </tr>
+                                    </template>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Edit Company Modal -->
+                <div x-show="isModalOpen" x-cloak
+                    class="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-50 z-50" x-transition>
+                    <div @click.away="closeModal()" class="bg-white rounded-lg p-6 w-full max-w-md shadow-lg">
+                        <h2 class="text-xl font-semibold mb-4">Edit Company</h2>
+                        <form @submit.prevent="updateCompany">
+                            <!-- Company Name (read-only or editable if you want) -->
+                            <div class="mb-4">
+                                <label for="company_name" class="block text-sm font-medium text-gray-700">Company
+                                    Name</label>
+                                <input type="text" id="company_name" x-model="selectedCompany.company_name" required
+                                    class="w-full border rounded px-2 py-1" />
+                            </div>
+
+                            <!-- CGPA -->
+                            <div class="mb-4">
+                                <label for="cgpa" class="block text-sm font-medium text-gray-700">CGPA</label>
+                                <input type="number" step="0.01" min="0" max="10" id="cgpa"
+                                    x-model.number="selectedCompany.cgpa" required
+                                    class="w-full border rounded px-2 py-1" />
+                            </div>
+
+                            <!-- Branch -->
+                            <div class="mb-4">
+                                <label for="branch" class="block text-sm font-medium text-gray-700">Branch</label>
+                                <input type="text" id="branch" x-model="selectedCompany.branch" required
+                                    class="w-full border rounded px-2 py-1" />
+                            </div>
+
+                            <!-- Domain -->
+                            <div class="mb-4">
+                                <label for="domain" class="block text-sm font-medium text-gray-700">Domain</label>
+                                <input type="text" id="domain" x-model="selectedCompany.domain" required
+                                    class="w-full border rounded px-2 py-1" />
+                            </div>
+
+                            <!-- Deadline Date -->
+                            <div class="mb-4">
+                                <label for="deadline_date" class="block text-sm font-medium text-gray-700">Deadline
+                                    Date</label>
+                                <input type="date" id="deadline_date" x-model="selectedCompany.deadline_date" required
+                                    class="w-full border rounded px-2 py-1" />
+                            </div>
+
+                            <!-- Recruitment Rounds -->
+                            <div class="mb-4">
+                                <label for="recruitment_rounds"
+                                    class="block text-sm font-medium text-gray-700">Recruitment Rounds</label>
+                                <input type="text" id="recruitment_rounds" x-model="selectedCompany.recruitment_rounds"
+                                    required class="w-full border rounded px-2 py-1" />
+                            </div>
+
+                            <div class="flex justify-end space-x-2">
+                                <button type="button" @click="closeModal()"
+                                    class="px-4 py-2 bg-gray-300 rounded text-gray-700">Cancel</button>
+                                <button type="submit" class="px-4 py-2 bg-blue-600 rounded text-white">Save</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+
+
+            <!-- Eligible Students Modal -->
+            <div x-show="isStudentsModalOpen" x-cloak
+                class="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-50 z-50">
+                <div class="bg-white rounded-lg p-6 w-full max-w-lg shadow-lg" @click.away="closeStudentsModal">
+                    <h2 class="text-xl font-semibold mb-4">Eligible Students</h2>
+                    <div class="space-y-4">
+                        <template x-for="student in eligibleStudents" :key="student.id">
+                            <div class="border rounded-lg p-4 shadow-md">
+                                <p><strong>JNTU Number:</strong> <span x-text="student.jntu_number"></span></p>
+                                <p><strong>Email:</strong> <span x-text="student.email"></span></p>
+                                <p><strong>CGPA:</strong> <span x-text="student.cgpa"></span></p>
+                                <p><strong>Branch:</strong> <span x-text="student.branch"></span></p>
+                            </div>
+                        </template>
+                        <template x-if="eligibleStudents.length === 0">
+                            <p class="text-gray-500">No eligible students found for the selected criteria.</p>
+                        </template>
+                    </div>
+                    <div class="flex justify-end mt-4">
+                        <button @click="closeStudentsModal"
+                            class="px-4 py-2 bg-gray-300 rounded text-gray-700">Close</button>
+                    </div>
+                </div>
+            </div>
+
+
+
+
+
+            <!-- <script>
+                function companiesTable() {
+                    return {
+                        companies: [],
+                        searchTerm: '',
+                        isModalOpen: false,
+                        isStudentsModalOpen: false,
+                        selectedCompany: null,
+                        eligibleStudents: [],
+
+                        get filteredCompanies() {
+                            if (this.searchTerm.trim() === '') return this.companies;
+                            return this.companies.filter(company =>
+                                company.company_name.toLowerCase().includes(this.searchTerm.toLowerCase())
+                            );
+                        },
+
+                        openModal(company) {
+                            // Deep clone to avoid direct mutation until submit
+                            this.selectedCompany = JSON.parse(JSON.stringify(company));
+
+                            // Format date properly if it's not already in yyyy-MM-dd for input[type=date]
+                            if (this.selectedCompany.deadline_date) {
+                                let d = new Date(this.selectedCompany.deadline_date);
+                                this.selectedCompany.deadline_date = d.toISOString().split('T')[0];
+                            }
+
+                            this.isModalOpen = true;
+                        },
+
+                        closeModal() {
+                            this.isModalOpen = false;
+                            this.selectedCompany = null;
+                        },
+
+                        async updateCompany() {
+                            try {
+                                const response = await fetch(`/recruitment_forms/${this.selectedCompany.id}`, {
+                                    method: 'PUT',
+                                    headers: { 'Content-Type': 'application/json' },
+                                    body: JSON.stringify(this.selectedCompany)
+                                });
+
+                                if (response.ok) {
+                                    alert('Company updated successfully!');
+                                    this.closeModal();
+                                    await this.fetchCompanies();
+                                } else {
+                                    const error = await response.json();
+                                    alert(`Update Error: ${error.message}`);
+                                }
+                            } catch (error) {
+                                console.error('Update Failed:', error);
+                                alert('Failed to update the company. Please try again later.');
+                            }
+                        },
+
+                        async fetchCompanies() {
+                            try {
+                                const response = await fetch('/recruitment_forms');
+                                if (!response.ok) throw new Error('Failed to fetch companies');
+                                this.companies = await response.json();
+                            } catch (error) {
+                                console.error('Error fetching companies:', error);
+                                alert('Failed to load companies. Please try again later.');
+                            }
+                        },
+
+                        async deleteCompany(companyId) {
+                            if (!confirm('Are you sure you want to delete this company?')) return;
+                            try {
+                                const response = await fetch(`/companies/${companyId}`, { method: 'DELETE' });
+                                if (response.ok) {
+                                    this.companies = this.companies.filter(c => c.id !== companyId);
+                                    alert('Company deleted successfully.');
+                                } else {
+                                    alert('Failed to delete the company.');
+                                }
+                            } catch (error) {
+                                console.error('Error deleting company:', error);
+                                alert('Failed to delete the company. Please try again later.');
+                            }
+                        },
+
+                        init() {
+                            this.fetchCompanies();
+                        },
+
+                        async fetchEligibleStudents(companyId) {
+                            try {
+                                // Close the modal before fetching
+                                this.isModalOpen = false;
+
+                                // Fetch eligible students
+                                const response = await fetch(`/students/eligible?companyId=${companyId}`);
+                                if (!response.ok) throw new Error(`Failed to fetch students: ${response.statusText}`);
+
+                                this.students = await response.json();
+
+                                // Open the modal after fetching
+                                this.isModalOpen = true;
+                            } catch (error) {
+                                console.error('Error fetching eligible students:', error);
+                                alert('Failed to fetch eligible students. Please try again later.');
+                            }
+                        },
+                        closeModal() {
+                            this.isModalOpen = false;
+                        }
+                    };
+                }
+            </script> -->
+            <script>
+                function companiesTable() {
+                    return {
+                        companies: [], // Array to hold companies data
+                        searchTerm: '', // Search term for filtering companies
+                        isModalOpen: false, // State for the "Edit Company" modal
+                        isStudentsModalOpen: false, // State for the "Eligible Students" modal
+                        selectedCompany: null, // Object to hold the selected company's data
+                        eligibleStudents: [], // Array to hold eligible students data
+
+                        // Computed property to filter companies based on the search term
+                        get filteredCompanies() {
+                            if (this.searchTerm.trim() === '') return this.companies;
+                            return this.companies.filter(company =>
+                                company.company_name.toLowerCase().includes(this.searchTerm.toLowerCase())
+                            );
+                        },
+
+                        // Initialize by fetching companies
+                        init() {
+                            this.fetchCompanies();
+                        },
+
+                        // Fetch all companies from the server
+                        async fetchCompanies() {
+                            try {
+                                const response = await fetch('/recruitment_forms');
+                                if (!response.ok) throw new Error('Failed to fetch companies');
+                                this.companies = await response.json();
+                            } catch (error) {
+                                console.error('Error fetching companies:', error.message);
+                                alert('Failed to load companies. Please try again later.');
+                            }
+                        },
+
+                        // Open the "Edit Company" modal
+                        openModal(company) {
+                            // Deep clone to avoid direct mutation
+                            this.selectedCompany = JSON.parse(JSON.stringify(company));
+
+                            // Format date for input[type=date]
+                            if (this.selectedCompany.deadline_date) {
+                                const date = new Date(this.selectedCompany.deadline_date);
+                                this.selectedCompany.deadline_date = date.toISOString().split('T')[0];
+                            }
+
+                            this.isModalOpen = true;
+                        },
+
+                        // Close the "Edit Company" modal
+                        closeModal() {
+                            this.isModalOpen = false;
+                            this.selectedCompany = null;
+                        },
+
+                        // Update a company's details
+                        async updateCompany() {
+                            try {
+                                const response = await fetch(`/recruitment_forms/${this.selectedCompany.id}`, {
+                                    method: 'PUT',
+                                    headers: { 'Content-Type': 'application/json' },
+                                    body: JSON.stringify(this.selectedCompany)
+                                });
+
+                                if (response.ok) {
+                                    alert('Company updated successfully!');
+                                    this.closeModal();
+                                    await this.fetchCompanies();
+                                } else {
+                                    const error = await response.json();
+                                    alert(`Update Error: ${error.message}`);
+                                }
+                            } catch (error) {
+                                console.error('Error updating company:', error.message);
+                                alert('Failed to update the company. Please try again later.');
+                            }
+                        },
+
+                        // Delete a company
+                        async deleteCompany(companyId) {
+                            if (!confirm('Are you sure you want to delete this company?')) return;
+
+                            try {
+                                const response = await fetch(`/companies/${companyId}`, { method: 'DELETE' });
+                                if (response.ok) {
+                                    this.companies = this.companies.filter(c => c.id !== companyId);
+                                    alert('Company deleted successfully.');
+                                } else {
+                                    alert('Failed to delete the company.');
+                                }
+                            } catch (error) {
+                                console.error('Error deleting company:', error.message);
+                                alert('Failed to delete the company. Please try again later.');
+                            }
+                        },
+
+                        // Fetch eligible students for a specific company
+                        async fetchEligibleStudents(companyId) {
+                            try {
+                                // Close the "Edit Company" modal if open
+                                this.isModalOpen = false;
+
+                                const response = await fetch(`/students/eligible?companyId=${companyId}`);
+                                if (!response.ok) throw new Error('Failed to fetch eligible students');
+
+                                this.eligibleStudents = await response.json();
+                                this.isStudentsModalOpen = true; // Open the "Eligible Students" modal
+                            } catch (error) {
+                                console.error('Error fetching eligible students:', error.message);
+                                alert('Failed to fetch eligible students. Please try again later.');
+                            }
+                        },
+
+                        // Close the "Eligible Students" modal
+                        closeStudentsModal() {
+                            this.isStudentsModalOpen = false;
+                            this.eligibleStudents = [];
+                        }
+                    };
+                }
+            </script>
+
+
+
+
+
+
+
+
+</body>
+
+</html>
